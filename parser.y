@@ -14,7 +14,7 @@
 
 	//Instance of Class that manages the variables/generate mips
 	Variable_Stack* var_stack = new Variable_Stack();
-   Generate_MIPS* mips_code = new Generate_MIPS();
+     Generate_MIPS* mips_code = new Generate_MIPS();
 	
 	//Definition for error function
 	void yyerror(std::string msg);
@@ -105,6 +105,7 @@ program:    /* empty */
 ***************************/
 var_declarations:  
             var_declarations var_declaration
+            { std::cout<<"RUN UNTIL Empty"<<std::endl; }
             |
             /* Empty */
             ;
@@ -115,6 +116,7 @@ var_declarations:
 *******************************/
 var_declaration:
             _INT declaration_list _SEMICOLON
+            { std::cout<<"RUN UNTIL HERE"<<std::endl; }
             ;
 
 
@@ -126,6 +128,7 @@ declaration_list:
             declaration_list _COMMA declaration
             |
             declaration
+            { std::cout<<"RUN UNTIL HERE"<<std::endl; }
             ;
 
 //------------------------------------------------- TODO: NUMBER ----------------------------
@@ -142,6 +145,7 @@ declaration:
             _VAR _ASSIGN_OP _ADD _NUMBER
             |
             _VAR _ASSIGN_OP _NUMBER
+            { std::cout<<"RUN UNTIL HERE"<<std::endl; }
             |
             /* Second Condition */
             _VAR _LSQUARE _MINUS _NUMBER _RSQUARE
@@ -342,7 +346,7 @@ exp:
             |
             _LPAREN exp _RPAREN
             |
-            _MINUS exp
+            _MINUS _LPAREN exp _RPAREN
             ;
 
 
@@ -365,12 +369,12 @@ int main(int argc, char* argv[]) {
 		fprintf(stderr, "Missing input file!\n");
 	}
 	yyin = fopen(argv[1], "r");
-	if ( yyparse() ) {
-		fprintf(stderr, "Unable to parse the input!\n");
-		return 1;
+	if ( !yyparse() ) {
+          fprintf(stderr, "Unable to parse the input!\n");
+          return 1;
 	}
-	fclose(yyin);
+	//fclose(yyin);
 	/* Output the MIPS code */
-	mips_code->output_mips();
-	return 0;
+	//mips_code->output_mips();
+	//return 0;
 }

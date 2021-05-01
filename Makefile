@@ -5,7 +5,7 @@ mips_header = Generate_MIPS/generate_mips.h
 micro: scanner.l parser.y $(mips_class) $(mips_header)
 	bison -d parser.y
 	flex scanner.l
-	g++ $(file_for_g++) $(mips_class) -o micro -lfl 
+	g++ $(file_for_g++) $(mips_class) -o xc -lfl 
 
 clean:
-	rm -r parser.tab.c parser.tab.h lex.yy.c micro mips.asm
+	rm -r parser.tab.c parser.tab.h lex.yy.c xc
