@@ -10,7 +10,7 @@
 	#include <iostream>
 	#include <vector>
 
-   #include "Generate_MIPS/generate_mips.h"
+     #include "Generate_MIPS/generate_mips.h"
 
 	//Instance of Class that manages the variables/generate mips
 	Variable_Stack* var_stack = new Variable_Stack();
@@ -77,10 +77,7 @@
 %token _ADD
 %token _MINUS
 
-%left _ADD _MINUS _MULTIPLE _DIVIDE
-%left _SHL_OP _SHR_OP 
-%left _ASSIGN_OP _AND _OR _NOTEQ _EQ _OROR _ANDAND
-%left _LT _GT _LTEQ _GTEQ
+%left _ADD _MINUS _MULTIPLE _DIVIDE _SHL_OP _SHR_OP _ASSIGN_OP _AND _OR _NOTEQ _EQ _OROR _ANDAND _LT _GT _LTEQ _GTEQ
 %right _NOT 
 
 %%
@@ -105,7 +102,6 @@ program:    /* empty */
 ***************************/
 var_declarations:  
             var_declarations var_declaration
-            { std::cout<<"RUN UNTIL Empty"<<std::endl; }
             |
             /* Empty */
             ;
@@ -116,7 +112,6 @@ var_declarations:
 *******************************/
 var_declaration:
             _INT declaration_list _SEMICOLON
-            { std::cout<<"RUN UNTIL HERE"<<std::endl; }
             ;
 
 
@@ -128,7 +123,6 @@ declaration_list:
             declaration_list _COMMA declaration
             |
             declaration
-            { std::cout<<"RUN UNTIL HERE"<<std::endl; }
             ;
 
 //------------------------------------------------- TODO: NUMBER ----------------------------
@@ -145,7 +139,6 @@ declaration:
             _VAR _ASSIGN_OP _ADD _NUMBER
             |
             _VAR _ASSIGN_OP _NUMBER
-            { std::cout<<"RUN UNTIL HERE"<<std::endl; }
             |
             /* Second Condition */
             _VAR _LSQUARE _MINUS _NUMBER _RSQUARE
@@ -242,8 +235,10 @@ assign_statement:
 **************************************/
 if_statement:
             if_stmt
+            { std::cout<<"if_stmt"<<std::endl; }
             |
             if_stmt _ELSE code_block
+            { std::cout<<"else_stmt"<<std::endl; }
             ;
 
 
@@ -304,8 +299,6 @@ exp:
             |
             _ADD _NUMBER
             |
-            _MINUS _NUMBER
-            |
             _VAR
             |
             _VAR _LSQUARE exp _RSQUARE
@@ -346,7 +339,7 @@ exp:
             |
             _LPAREN exp _RPAREN
             |
-            _MINUS _LPAREN exp _RPAREN
+            _MINUS exp
             ;
 
 
@@ -369,7 +362,7 @@ int main(int argc, char* argv[]) {
 		fprintf(stderr, "Missing input file!\n");
 	}
 	yyin = fopen(argv[1], "r");
-	if ( !yyparse() ) {
+	if ( yyparse() ) {
           fprintf(stderr, "Unable to parse the input!\n");
           return 1;
 	}

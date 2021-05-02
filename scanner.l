@@ -29,6 +29,7 @@ LETTER [a-zA-Z]
 
 %%
 
+\n          { /* empty */ }
 int         { std::cout<<"_INT"<<std::endl; return _INT; }
 main        { std::cout<<"_MAIN"<<std::endl; return _MAIN; }
 void        { std::cout<<"_VOID"<<std::endl; return _VOID; }
@@ -49,7 +50,6 @@ printf      { std::cout<<"_PRINTF"<<std::endl; return _PRINTF; }
 [[]         { std::cout<<"_LSQUARE"<<std::endl; return _LSQUARE; }
 []]         { std::cout<<"_RSQUARE"<<std::endl; return _RSQUARE; }
 [;]         { std::cout<<"_SEMICOLON"<<std::endl; return _SEMICOLON; }
-[:]         { std::cout<<"_COLON"<<std::endl; return _COLON; }
 [,]         { std::cout<<"_COMMA"<<std::endl; return _COMMA; }
 "<<"        { std::cout<<"_SHL_OP"<<std::endl; return _SHL_OP; }
 ">>"        { std::cout<<"_SHR_OP"<<std::endl; return _SHR_OP; }
@@ -69,6 +69,6 @@ printf      { std::cout<<"_PRINTF"<<std::endl; return _PRINTF; }
 [!]         { std::cout<<"_NOT"<<std::endl; return _NOT; }
 [<]         { std::cout<<"_LT"<<std::endl; return _LT; }
 [>]         { std::cout<<"_GT"<<std::endl; return _GT; }
-[ ]         { /* empty */ }
+.           { /* empty */ }
 
 %%
