@@ -77,8 +77,17 @@
 %token _ADD
 %token _MINUS
 
-%left _ADD _MINUS _MULTIPLE _DIVIDE _SHL_OP _SHR_OP _ASSIGN_OP _AND _OR _NOTEQ _EQ _OROR _ANDAND _LT _GT _LTEQ _GTEQ
-%right _NOT 
+%left _LPAREN _RPAREN
+%left _LSQUARE _RSQUARE
+%right _NOT
+%left _MULTIPLE _DIVIDE
+%left _ADD _MINUS
+%left _SHL_OP _SHR_OP
+%left _LT _GT _LTEQ _GTEQ
+%left _EQ _NOTEQ
+%left _AND
+%left _ANDAND
+%left _OROR
 
 %%
 
@@ -310,8 +319,10 @@ exp:
             exp _OR exp
             |
             exp _ADD exp
+            { std::cout<<"ADD"<<std::endl; }
             |
             exp _MINUS exp
+            { std::cout<<"ADD"<<std::endl; }
             |
             exp _MULTIPLE exp
             |
