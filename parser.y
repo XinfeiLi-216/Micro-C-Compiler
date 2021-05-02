@@ -13,8 +13,7 @@
      #include "Generate_MIPS/generate_mips.h"
 
 	//Instance of Class that manages the variables/generate mips
-	Variable_Stack* var_stack = new Variable_Stack();
-     Generate_MIPS* mips_code = new Generate_MIPS();
+	
 	
 	//Definition for error function
 	void yyerror(std::string msg);
@@ -77,17 +76,18 @@
 %token _ADD
 %token _MINUS
 
-%left _LPAREN _RPAREN
-%left _LSQUARE _RSQUARE
-%right _NOT
-%left _MULTIPLE _DIVIDE
-%left _ADD _MINUS
-%left _SHL_OP _SHR_OP
-%left _LT _GT _LTEQ _GTEQ
-%left _EQ _NOTEQ
-%left _AND
-%left _ANDAND
 %left _OROR
+%left _ANDAND
+%left _OR
+%left _AND
+%left _EQ _NOTEQ
+%left _LT _GT _LTEQ _GTEQ
+%left _SHL_OP _SHR_OP
+%left _ADD _MINUS
+%left _MULTIPLE _DIVIDE
+%right _NOT
+%left _LSQUARE _RSQUARE
+%left _LPAREN _RPAREN
 
 %%
 
@@ -322,11 +322,13 @@ exp:
             { std::cout<<"ADD"<<std::endl; }
             |
             exp _MINUS exp
-            { std::cout<<"ADD"<<std::endl; }
+            { std::cout<<"MINUS"<<std::endl; }
             |
             exp _MULTIPLE exp
+            { std::cout<<"MULTIPLE"<<std::endl; }
             |
             exp _DIVIDE exp
+            { std::cout<<"DIVIDE"<<std::endl; }
             |
             exp _LT exp
             |
@@ -349,6 +351,7 @@ exp:
             exp _OROR exp
             |
             _LPAREN exp _RPAREN
+            { std::cout<<"PAREN"<<std::endl; }
             |
             _MINUS exp
             ;
