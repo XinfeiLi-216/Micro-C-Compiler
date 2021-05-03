@@ -326,10 +326,15 @@ exp:
           |
           exp _AND exp
           {
-               // variable_stack->expression_declaration();
+               std::cout<<"AND"<<std::endl;
+               variable_stack->expression_operations(_and);
           }
           |
           exp _OR exp
+          {
+               std::cout<<"OR"<<std::endl;
+               variable_stack->expression_operations(_or);
+          }
           |
           exp _ADD exp
           {
@@ -338,39 +343,98 @@ exp:
           }
           |
           exp _MINUS exp
-          { std::cout<<"MINUS"<<std::endl; }
+          { 
+               std::cout<<"MINUS"<<std::endl; 
+               variable_stack->expression_operations(minus);
+          }
           |
           exp _MULTIPLE exp
-          { std::cout<<"MULTIPLE"<<std::endl; }
+          { 
+               std::cout<<"MULTIPLE"<<std::endl;
+               variable_stack->expression_operations(multiple) 
+          }
           |
           exp _DIVIDE exp
-          { std::cout<<"DIVIDE"<<std::endl; }
+          { 
+               std::cout<<"DIVIDE"<<std::endl; 
+               variable_stack->expression_operations(divide);
+          }
           |
           exp _LT exp
+          { 
+               std::cout<<"LT"<<std::endl; 
+               variable_stack->expression_operations(lt);
+          }
           |
           exp _GT exp
+          { 
+               std::cout<<"GT"<<std::endl; 
+               variable_stack->expression_operations(gt);
+          }
           |
           exp _EQ exp
+          { 
+               std::cout<<"EQUAL"<<std::endl; 
+               variable_stack->expression_operations(equal);
+          }
           |
           exp _NOTEQ exp
+          { 
+               std::cout<<"NOTEQ"<<std::endl; 
+               variable_stack->expression_operations(noteq);
+          }
           |
           exp _LTEQ exp
+          { 
+               std::cout<<"LTEQ"<<std::endl; 
+               variable_stack->expression_operations(lteq);
+          }
           |
           exp _GTEQ exp
+          { 
+               std::cout<<"GTEQ"<<std::endl; 
+               variable_stack->expression_operations(gteq);
+          }
           |
           exp _SHL_OP exp
+          { 
+               std::cout<<"SHLOP"<<std::endl; 
+               variable_stack->expression_operations(shlop);
+          }
           |
           exp _SHR_OP exp
+          { 
+               std::cout<<"SHROP"<<std::endl; 
+               variable_stack->expression_operations(shrop);
+          }
           |
           exp _ANDAND exp
+          { 
+               std::cout<<"ANDAND"<<std::endl; 
+               variable_stack->expression_operations(andand);
+          }
           |
           exp _OROR exp
+          { 
+               std::cout<<"OROR"<<std::endl; 
+               variable_stack->expression_operations(oror);
+          }
           |
           _LPAREN exp _RPAREN
-          { std::cout<<"PAREN"<<std::endl; }
+          { 
+               std::cout<<"PAREN"<<std::endl; 
+               variable_stack->expression_operations(paren);
+          }
           |
           _MINUS exp
           ;
+
+
+/**************exp_while*************
+     # TODO
+*************************************/
+exp_while:
+
 
 
 %%
