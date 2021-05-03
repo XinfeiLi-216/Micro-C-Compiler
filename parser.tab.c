@@ -75,11 +75,10 @@
 	#include <iostream>
 	#include <vector>
 
-     #include "Generate_MIPS/generate_mips.h"
+     #include "Generate_MIPS/Variable_Stack.hpp"
 
 	//Instance of Class that manages the variables/generate mips
-	Variable_Stack* var_stack = new Variable_Stack();
-     Generate_MIPS* mips_code = new Generate_MIPS();
+	Variable_Stack* variable_stack = new Variable_Stack();
 	
 	//Definition for error function
 	void yyerror(std::string msg);
@@ -89,7 +88,7 @@
 	extern "C" FILE *yyin;
 	extern "C" int yylex();
 
-#line 93 "parser.tab.c"
+#line 92 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -551,13 +550,13 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   106,   106,   114,   115,   124,   133,   135,   147,   149,
-     151,   154,   156,   158,   160,   169,   171,   180,   182,   193,
-     195,   197,   199,   210,   212,   214,   216,   225,   227,   236,
-     238,   247,   250,   259,   267,   275,   283,   291,   299,   308,
-     310,   312,   314,   316,   318,   320,   322,   325,   328,   331,
-     334,   336,   338,   340,   342,   344,   346,   348,   350,   352,
-     354,   357
+       0,   105,   105,   113,   114,   123,   132,   134,   146,   148,
+     150,   153,   155,   157,   159,   168,   170,   179,   181,   192,
+     194,   196,   198,   209,   211,   213,   215,   224,   226,   235,
+     237,   246,   249,   258,   266,   274,   282,   290,   298,   307,
+     310,   313,   323,   325,   327,   332,   334,   340,   343,   346,
+     349,   351,   353,   355,   357,   359,   361,   363,   365,   367,
+     369,   372
 };
 #endif
 
@@ -1271,49 +1270,85 @@ yyreduce:
   switch (yyn)
     {
   case 31: /* if_statement: if_stmt  */
-#line 248 "parser.y"
-            { std::cout<<"if_stmt"<<std::endl; }
-#line 1277 "parser.tab.c"
+#line 247 "parser.y"
+          { std::cout<<"if_stmt"<<std::endl; }
+#line 1276 "parser.tab.c"
     break;
 
   case 32: /* if_statement: if_stmt _ELSE code_block  */
-#line 251 "parser.y"
-            { std::cout<<"else_stmt"<<std::endl; }
-#line 1283 "parser.tab.c"
+#line 250 "parser.y"
+          { std::cout<<"else_stmt"<<std::endl; }
+#line 1282 "parser.tab.c"
     break;
 
-  case 46: /* exp: exp _ADD exp  */
-#line 323 "parser.y"
-            { std::cout<<"ADD"<<std::endl; }
-#line 1289 "parser.tab.c"
+  case 39: /* exp: _NUMBER  */
+#line 308 "parser.y"
+          { variable_stack->expression_declaration((yyvsp[0].intval)); }
+#line 1288 "parser.tab.c"
     break;
 
-  case 47: /* exp: exp _MINUS exp  */
-#line 326 "parser.y"
-            { std::cout<<"MINUS"<<std::endl; }
-#line 1295 "parser.tab.c"
+  case 40: /* exp: _ADD _NUMBER  */
+#line 311 "parser.y"
+          { variable_stack->expression_declaration((yyvsp[0].intval)); }
+#line 1294 "parser.tab.c"
     break;
 
-  case 48: /* exp: exp _MULTIPLE exp  */
-#line 329 "parser.y"
-            { std::cout<<"MULTIPLE"<<std::endl; }
-#line 1301 "parser.tab.c"
-    break;
-
-  case 49: /* exp: exp _DIVIDE exp  */
-#line 332 "parser.y"
-            { std::cout<<"DIVIDE"<<std::endl; }
+  case 41: /* exp: _VAR  */
+#line 314 "parser.y"
+          {    
+               if (variable_stack->variable_value_exists((yyvsp[0].svalue))) {
+                    variable_stack->expression_declaration(variable_stack->get_variable_value((yyvsp[0].svalue)));    
+               } else {
+                    std::cout<<"[Error] Use uninitial value in program"<<std::endl;
+                    abort();
+               }
+          }
 #line 1307 "parser.tab.c"
     break;
 
+  case 44: /* exp: exp _AND exp  */
+#line 328 "parser.y"
+          {
+               // variable_stack->expression_declaration();
+          }
+#line 1315 "parser.tab.c"
+    break;
+
+  case 46: /* exp: exp _ADD exp  */
+#line 335 "parser.y"
+          {
+               std::cout<<"ADD"<<std::endl;
+               variable_stack->expression_operations(add);
+          }
+#line 1324 "parser.tab.c"
+    break;
+
+  case 47: /* exp: exp _MINUS exp  */
+#line 341 "parser.y"
+          { std::cout<<"MINUS"<<std::endl; }
+#line 1330 "parser.tab.c"
+    break;
+
+  case 48: /* exp: exp _MULTIPLE exp  */
+#line 344 "parser.y"
+          { std::cout<<"MULTIPLE"<<std::endl; }
+#line 1336 "parser.tab.c"
+    break;
+
+  case 49: /* exp: exp _DIVIDE exp  */
+#line 347 "parser.y"
+          { std::cout<<"DIVIDE"<<std::endl; }
+#line 1342 "parser.tab.c"
+    break;
+
   case 60: /* exp: _LPAREN exp _RPAREN  */
-#line 355 "parser.y"
-            { std::cout<<"PAREN"<<std::endl; }
-#line 1313 "parser.tab.c"
+#line 370 "parser.y"
+          { std::cout<<"PAREN"<<std::endl; }
+#line 1348 "parser.tab.c"
     break;
 
 
-#line 1317 "parser.tab.c"
+#line 1352 "parser.tab.c"
 
       default: break;
     }
@@ -1507,7 +1542,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 361 "parser.y"
+#line 376 "parser.y"
 
 
 
