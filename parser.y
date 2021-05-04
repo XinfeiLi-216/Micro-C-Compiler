@@ -144,19 +144,26 @@ declaration_list:
 declaration:
           /* First Condition */
           _VAR _ASSIGN_OP _MINUS _NUMBER
+          { variable_stack->variable_declaration_with_value($1,-1*$4); }
           |
           _VAR _ASSIGN_OP _ADD _NUMBER
+          { variable_stack->variable_declaration_with_value($1,$4); }
           |
           _VAR _ASSIGN_OP _NUMBER
+          { variable_stack->variable_declaration_with_value($1,$3); }
           |
           /* Second Condition */
           _VAR _LSQUARE _MINUS _NUMBER _RSQUARE
+          { std::cout<<"Cannot declare a array with minus length"<<std::endl; }
           |
           _VAR _LSQUARE _ADD _NUMBER _RSQUARE
+          { variable_stack->array_declaration($1,$4); }
           |
           _VAR _LSQUARE _NUMBER _RSQUARE
+          { variable_stack->array_declaration($1,$3); }
           |
           _VAR
+          { variable_stack->variable_declaration_without_value($1); }
           ;
 
 
@@ -233,8 +240,14 @@ read_write_statement:
 ******************************************/
 assign_statement:
           _VAR _LSQUARE exp _RSQUARE _ASSIGN_OP exp
+          { 
+               variable_stack->array_be_valued($1);
+          }
           |
-          _VAR _ASSIGN_OP exp 
+          _VAR _ASSIGN_OP exp
+          {
+               variable_stack->variable_be_valued($1);
+          }
           ;
 
 
@@ -468,8 +481,8 @@ int main(int argc, char* argv[]) {
           fprintf(stderr, "Unable to parse the input!\n");
           return 1;
 	}
-	//fclose(yyin);
+	fclose(yyin);
 	/* Output the MIPS code */
 	variable_stack->generate();
-	//return 0;
+	return 0;
 }

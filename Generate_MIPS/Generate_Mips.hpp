@@ -180,6 +180,15 @@ class Generate_Mips{
             text_segment.push_back("li $t1,"+std::to_string(value));
             text_segment.push_back("sw $t1,"+std::to_string(index*4)+"($t0)");
         }
+        void variable_valued(int var_idx,int cumlative_index){
+            text_segment.push_back("lw $t1,"+std::to_string(cumlative_index*4)+"($t0)");
+            text_segment.push_back("sw $t1,"+std::to_string(var_idx*4)+"$t0");
+        }
+        void array_valued(int idx_for_valued,int cumlative_index){
+            text_segment.push_back("lw $t1,"+std::to_string(cumlative_index*4)+"($t0)");
+            text_segment.push_back("sw $t1,"+std::to_string(idx_for_valued*4)+"$t0");
+        };
+
 };
 
 #endif
