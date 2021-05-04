@@ -150,7 +150,7 @@ declaration:
           { variable_stack->variable_declaration_with_value($1,$4); }
           |
           _VAR _ASSIGN_OP _NUMBER
-          { variable_stack->variable_declaration_with_value($1,$3); }
+          { std::cout<<"ASSIGN"<<std::endl; variable_stack->variable_declaration_with_value($1,$3); }
           |
           /* Second Condition */
           _VAR _LSQUARE _MINUS _NUMBER _RSQUARE
@@ -197,6 +197,7 @@ statements:
 ****************************/
 statement:
           assign_statement _SEMICOLON
+          { std::cout<<"ASSIGN"<<std::endl; }
           |
           control_statement 
           |
@@ -277,6 +278,7 @@ if_stmt:
 ******************************************/
 while_statement:
           _WHILE _LPAREN exp _RPAREN code_block
+          { std::cout<<"WHILE"<<std::endl; }
           ;
 
 
@@ -289,7 +291,7 @@ do_while_statement:
 
 
 /*************return_statement**************
-     while LPAREN exp RPAREN code_block
+     #TODO
 ********************************************/
 return_statement:
           _RETURN
@@ -326,7 +328,7 @@ exp:
           _VAR
           {    
                if (variable_stack->variable_value_exists($1)) {
-                    variable_stack->expression_declaration(variable_stack->get_variable_value($1));    
+                    variable_stack->expression_variable($1);    
                } else {
                     std::cout<<"[Error] Use uninitial value in program"<<std::endl;
                     abort();

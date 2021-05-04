@@ -33,6 +33,20 @@ class Variable_Stack{
         int index = 0, count = 0;
         Generate_Mips* generate_mips = new Generate_Mips();
     public:
+        /*********************************************************
+         *                 Write/Read Functions
+         *********************************************************/
+        void while_stmt(){
+            
+        }
+
+        /*********************************************************
+         *                 Expression Functions
+         *********************************************************/
+        int expression_variable(std::string variable_name){
+            int variable_idx = variable_map[variable_name].memory_index;
+            generate_mips->expression_variable(variable_idx,index++);
+        }
         int expression_declaration(int value){
             temp_var_map[count++] = storage_set(index,value);
             generate_mips->expression_decla(index++,value);
@@ -134,6 +148,7 @@ class Variable_Stack{
             variable_without_value.insert(variable_name);
         }
         void variable_declaration_with_value(std::string variable_name, int value){
+            generate_mips->variable_decla(index,value);
             variable_map[variable_name] = storage_set(index++,value);
         }
         void array_declaration(std::string array_name,int length){
@@ -160,14 +175,10 @@ class Variable_Stack{
             int var_idx = variable_map[variable_name].memory_index;
             generate_mips->variable_valued(var_idx,index-1);
         }
-        void array_be_valued(std::string array_name,int index_in_arr){
+        void array_be_valued(std::string array_name){
             int arr_len = array_map[array_name].length;
             int arr_idx = array_map[array_name].memory_index;
-            if (index_in_arr>arr_len-1){
-                std::cout<<"[Error] Trying to assign value to array out of range"<<std::endl;
-                abort();
-            }
-            generate_mips->array_valued(arr_idx+index_in_arr,index-1);
+            generate_mips->array_valued(index-1,arr_len);
         }
         void generate(){
             generate_mips->generate_mips_code();

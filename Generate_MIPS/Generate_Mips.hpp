@@ -22,6 +22,14 @@ class Generate_Mips{
             "lui $t0,4097"};
         int gt_not_count=0,equal_count=0,lteq_count=0,gteq_count=0,s1_zero_count=0,s2_zero_count=0;
     public:
+        void expression_variable(int variable_idx,int cmulative_idx){
+            text_segment.push_back("lw $t1,"+std::to_string(variable_idx*4)+"($t0)");
+            text_segment.push_back("sw $t1,"+std::to_string(cmulative_idx*4)+"($t0)");
+        }
+        void expression_decla(int index, int value){
+            text_segment.push_back("li $t1,"+std::to_string(value));
+            text_segment.push_back("sw $t1,"+std::to_string(index*4)+"($t0)");
+        }
         void operations_in_memory(int idx1,int idx2,operations operation){
             switch (operation){
                 case 0:
@@ -167,6 +175,23 @@ class Generate_Mips{
                     break;
             }
         }
+
+        void variable_valued(int var_idx,int cumlative_index){
+            text_segment.push_back("lw $t1,"+std::to_string(cumlative_index*4)+"($t0)");
+            text_segment.push_back("sw $t1,"+std::to_string(var_idx*4)+"($t0)");
+        }
+        void array_valued(int cumlative_index,int length){
+            text_segment.push_back("lw $t1,"+std::to_string(cumlative_index*4-4)+"($t0)");
+            text_segment.push_back("lw $t2,"+std::to_string(cumlative_index*4)+"($t0)");
+            text_segment.push_back("li $t3,4");
+            text_segment.push_back("mul $t4,$t3,$t1");
+            text_segment.push_back("add $t4,$t4,$t0");
+            text_segment.push_back("sw $t1,0($t4)");
+        };
+        void variable_decla(int index,int value){
+            text_segment.push_back("li $t1,"+std::to_string(value));
+            text_segment.push_back("sw $t1,"+std::to_string(index*4)+"($t0)");
+        }
         void generate_mips_code(){
             std::ofstream outfile("compile.asm");
             for (auto line:data_segment){
@@ -176,19 +201,6 @@ class Generate_Mips{
                 outfile<<line<<std::endl;
             }
         }
-        void expression_decla(int index, int value){
-            text_segment.push_back("li $t1,"+std::to_string(value));
-            text_segment.push_back("sw $t1,"+std::to_string(index*4)+"($t0)");
-        }
-        void variable_valued(int var_idx,int cumlative_index){
-            text_segment.push_back("lw $t1,"+std::to_string(cumlative_index*4)+"($t0)");
-            text_segment.push_back("sw $t1,"+std::to_string(var_idx*4)+"$t0");
-        }
-        void array_valued(int idx_for_valued,int cumlative_index){
-            text_segment.push_back("lw $t1,"+std::to_string(cumlative_index*4)+"($t0)");
-            text_segment.push_back("sw $t1,"+std::to_string(idx_for_valued*4)+"$t0");
-        };
-
 };
 
 #endif
