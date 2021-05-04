@@ -5,26 +5,45 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
+#include <fstream>
 
 enum operations{lsquare,_not,_and,_or,add,minus,multiple,divide,lt,gt,
-                equal,noteq,lteq,gteq,shlop,shrop,andand,oror,paren};
+                equal,noteq,lteq,gteq,shlop,shrop,andand,oror,paren,minus_number};
 
 class Generate_Mips{
     private:
         /* This vector store the data segment of mips code */
-		std::vector<std::string> data_segment{".data",
-			"_prompt: .asciiz \"Enter the value of variable \" ",
-			"_enter: .asciiz \"  \\n\" "};
+		// std::vector<std::string> data_segment{".data",
+		// 	"_prompt: .asciiz \"Enter the value of variable \" ",
+		// 	"_enter: .asciiz \"  \\n\" "};
+        std::vector<std::string> data_segment{".data"};
 		/* This vector store the text segment of mips code */
 		std::vector<std::string> text_segment{".text",
             "lui $t0,4097"};
-        int gt_not_count=0,equal_count=0;
+        int gt_not_count=0,equal_count=0,lteq_count=0,gteq_count=0,s1_zero_count=0,s2_zero_count=0;
     public:
         void operations_in_memory(int idx1,int idx2,operations operation){
             switch (operation){
+                case 0:
+                    // TODO
+                case 1:
+                    // TODO
+                    text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("li $s2,"+std::to_string(__INT32_MAX__));
+                    text_segment.push_back("xor $s0,$s1,$s2");
+                    text_segment.push_back("sw $s0,"+std::to_string(idx1*4)+"($t0)");
+                    break;
                 case 2:
+                    text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("lw $s2,"+std::to_string(idx2*4)+"($t0)");
+                    text_segment.push_back("and $s0,$s1,$s2");
+                    text_segment.push_back("sw $s0,"+std::to_string(idx1*4)+"($t0)");
                     break;
                 case 3:
+                    text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("lw $s2,"+std::to_string(idx2*4)+"($t0)");
+                    text_segment.push_back("or $s0,$s1,$s2");
+                    text_segment.push_back("sw $s0,"+std::to_string(idx1*4)+"($t0)");
                     break;
                 case 4:
                     text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
@@ -48,7 +67,8 @@ class Generate_Mips{
                     text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
                     text_segment.push_back("lw $s2,"+std::to_string(idx2*4)+"($t0)");
                     text_segment.push_back("div $s1,$s2");
-                    text_segment.push_back("sw $lo,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("mflo $t1");
+                    text_segment.push_back("sw $t1,"+std::to_string(idx1*4)+"($t0)");
                     break;
                 case 8:
                     text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
@@ -60,11 +80,11 @@ class Generate_Mips{
                     /* use beq slt to design the greater than */
                     text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
                     text_segment.push_back("lw $s2,"+std::to_string(idx2*4)+"($t0)");
-                    text_segment.push_back("slt $t3,$t1,$t2");
+                    text_segment.push_back("slt $t3,$s1,$s2");
                     text_segment.push_back("li $t4,1");
                     text_segment.push_back("sw $zero,"+std::to_string(idx1*4)+"($t0)");
                     text_segment.push_back("beq $t3,$t4,gt_not_label"+std::to_string(gt_not_count));
-                    text_segment.push_back("beq $t1,$t2,gt_not_label"+std::to_string(gt_not_count));    
+                    text_segment.push_back("beq $s1,$s2,gt_not_label"+std::to_string(gt_not_count));    
                     text_segment.push_back("sw $t4,"+std::to_string(idx1*4)+"($t0)");
                     text_segment.push_back("gt_not_label"+std::to_string(gt_not_count++)+":");                 
                     break;
@@ -87,34 +107,78 @@ class Generate_Mips{
                     text_segment.push_back("equal_label"+std::to_string(equal_count++)+":");
                     break;
                 case 12:
-                    std::cout<<"Case 12 Execution"<<std::endl;
-                    generate_mips->operations_in_memory(count-1,count,lteq);
+                    text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("lw $s2,"+std::to_string(idx2*4)+"($t0)");
+                    text_segment.push_back("slt $t3,$s1,$s2");
+                    text_segment.push_back("li $t4,1");
+                    text_segment.push_back("sw $t4,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("beq $t3,$t4,lteq_label"+std::to_string(lteq_count));
+                    text_segment.push_back("beq $s1,$s2,lteq_label"+std::to_string(lteq_count));    
+                    text_segment.push_back("sw $zero,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("lteq_label"+std::to_string(lteq_count++)+":");
                     break;
+                /* 从这里开始想通了greater than只要把两个寄存器的位置换一下就好 上面一直是按照不小于等于来做的 */
                 case 13:
-                    std::cout<<"Case 13 Execution"<<std::endl;
-                    generate_mips->operations_in_memory(count-1,count,gteq);
+                    text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("lw $s2,"+std::to_string(idx2*4)+"($t0)");
+                    text_segment.push_back("slt $t3,$s2,$s1");
+                    text_segment.push_back("li $t4,1");
+                    text_segment.push_back("sw $t4,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("beq $t3,$t4,gteq_label"+std::to_string(gteq_count));
+                    text_segment.push_back("beq $s1,$s2,gteq_label"+std::to_string(gteq_count));    
+                    text_segment.push_back("sw $zero,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("gteq_label"+std::to_string(gteq_count++)+":");
                     break;
                 case 14:
-                    std::cout<<"Case 14 Execution"<<std::endl;
-                    generate_mips->operations_in_memory(count-1,count,shlop);
+                    text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("lw $s2,"+std::to_string(idx2*4)+"($t0)");
+                    text_segment.push_back("sllv $t3,$s1,$s2");
+                    text_segment.push_back("sw $t3,"+std::to_string(idx1*4)+"($t0)");
                     break;
                 case 15:
-                    std::cout<<"Case 15 Execution"<<std::endl;
-                    generate_mips->operations_in_memory(count-1,count,shrop);
+                    text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("lw $s2,"+std::to_string(idx2*4)+"($t0)");
+                    text_segment.push_back("srlv $t3,$s1,$s2");
+                    text_segment.push_back("sw $t3,"+std::to_string(idx1*4)+"($t0)");
                     break;
                 case 16:
-                    std::cout<<"Case 16 Execution"<<std::endl;
-                    generate_mips->operations_in_memory(count-1,count,andand);
+                    text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("lw $s2,"+std::to_string(idx2*4)+"($t0)");
+                    text_segment.push_back("sw $zero,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("li $t3,1");
+                    text_segment.push_back("beq $s1,$zero,s1_zero_label"+std::to_string(s1_zero_count));
+                    text_segment.push_back("beq $s2,$zero,s2_zero_label"+std::to_string(s2_zero_count));
+                    text_segment.push_back("sw $t3,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("s1_zero_label"+std::to_string(s1_zero_count++)+":");
+                    text_segment.push_back("s2_zero_label"+std::to_string(s2_zero_count++)+":");
                     break;
                 case 17:
-                    std::cout<<"Case 17 Execution"<<std::endl;
-                    generate_mips->operations_in_memory(count-1,count,oror);
+                    text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("lw $s2,"+std::to_string(idx2*4)+"($t0)");
+                    text_segment.push_back("li $t3,1");
+                    text_segment.push_back("sw $t3,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("bne $s1,$zero,s1_zero_label"+std::to_string(s1_zero_count));
+                    text_segment.push_back("bne $s2,$zero,s2_zero_label"+std::to_string(s2_zero_count));
+                    text_segment.push_back("sw $zero,"+std::to_string(idx1*4)+"($t0)");
+                    text_segment.push_back("s1_zero_label"+std::to_string(s1_zero_count++)+":");
+                    text_segment.push_back("s2_zero_label"+std::to_string(s2_zero_count++)+":");
                     break;
                 case 18:
-                    std::cout<<"Case 18 Execution"<<std::endl;
-                    generate_mips->operations_in_memory(count-1,count,paren);
                     break;
             }
+        }
+        void generate_mips_code(){
+            std::ofstream outfile("compile.asm");
+            for (auto line:data_segment){
+                outfile<<line<<std::endl;
+            }
+            for (auto line:text_segment){
+                outfile<<line<<std::endl;
+            }
+        }
+        void expression_decla(int index, int value){
+            text_segment.push_back("li $t1,"+std::to_string(value));
+            text_segment.push_back("sw $t1,"+std::to_string(index*4)+"($t0)");
         }
 };
 

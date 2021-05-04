@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.7.  */
+/* A Bison parser, made by GNU Bison 3.5.1.  */
 
 /* Bison interface for Yacc-like parsers in C
 
@@ -31,9 +31,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
-   especially those whose name start with YY_ or yy_.  They are
-   private implementation details that can be changed or removed.  */
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
 
 #ifndef YY_YY_PARSER_TAB_H_INCLUDED
 # define YY_YY_PARSER_TAB_H_INCLUDED
@@ -45,57 +44,52 @@
 extern int yydebug;
 #endif
 
-/* Token kinds.  */
+/* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
   {
-    YYEMPTY = -2,
-    YYEOF = 0,                     /* "end of file"  */
-    YYerror = 256,                 /* error  */
-    YYUNDEF = 257,                 /* "invalid token"  */
-    _INT = 258,                    /* _INT  */
-    _MAIN = 259,                   /* _MAIN  */
-    _VOID = 260,                   /* _VOID  */
-    _BREAK = 261,                  /* _BREAK  */
-    _DO = 262,                     /* _DO  */
-    _ELSE = 263,                   /* _ELSE  */
-    _IF = 264,                     /* _IF  */
-    _WHILE = 265,                  /* _WHILE  */
-    _RETURN = 266,                 /* _RETURN  */
-    _SCANF = 267,                  /* _SCANF  */
-    _PRINTF = 268,                 /* _PRINTF  */
-    _VAR = 269,                    /* _VAR  */
-    _NUMBER = 270,                 /* _NUMBER  */
-    _LPAREN = 271,                 /* _LPAREN  */
-    _RPAREN = 272,                 /* _RPAREN  */
-    _LBRACE = 273,                 /* _LBRACE  */
-    _RBRACE = 274,                 /* _RBRACE  */
-    _LSQUARE = 275,                /* _LSQUARE  */
-    _RSQUARE = 276,                /* _RSQUARE  */
-    _SEMICOLON = 277,              /* _SEMICOLON  */
-    _COLON = 278,                  /* _COLON  */
-    _COMMA = 279,                  /* _COMMA  */
-    _ASSIGN_OP = 280,              /* _ASSIGN_OP  */
-    _MULTIPLE = 281,               /* _MULTIPLE  */
-    _DIVIDE = 282,                 /* _DIVIDE  */
-    _AND = 283,                    /* _AND  */
-    _OR = 284,                     /* _OR  */
-    _NOT = 285,                    /* _NOT  */
-    _LT = 286,                     /* _LT  */
-    _GT = 287,                     /* _GT  */
-    _SHL_OP = 288,                 /* _SHL_OP  */
-    _SHR_OP = 289,                 /* _SHR_OP  */
-    _EQ = 290,                     /* _EQ  */
-    _NOTEQ = 291,                  /* _NOTEQ  */
-    _LTEQ = 292,                   /* _LTEQ  */
-    _GTEQ = 293,                   /* _GTEQ  */
-    _OROR = 294,                   /* _OROR  */
-    _ANDAND = 295,                 /* _ANDAND  */
-    _ADD = 296,                    /* _ADD  */
-    _MINUS = 297                   /* _MINUS  */
+    _INT = 258,
+    _MAIN = 259,
+    _VOID = 260,
+    _BREAK = 261,
+    _DO = 262,
+    _ELSE = 263,
+    _IF = 264,
+    _WHILE = 265,
+    _RETURN = 266,
+    _SCANF = 267,
+    _PRINTF = 268,
+    _VAR = 269,
+    _NUMBER = 270,
+    _LPAREN = 271,
+    _RPAREN = 272,
+    _LBRACE = 273,
+    _RBRACE = 274,
+    _LSQUARE = 275,
+    _RSQUARE = 276,
+    _SEMICOLON = 277,
+    _COLON = 278,
+    _COMMA = 279,
+    _ASSIGN_OP = 280,
+    _MULTIPLE = 281,
+    _DIVIDE = 282,
+    _AND = 283,
+    _OR = 284,
+    _NOT = 285,
+    _LT = 286,
+    _GT = 287,
+    _SHL_OP = 288,
+    _SHR_OP = 289,
+    _EQ = 290,
+    _NOTEQ = 291,
+    _LTEQ = 292,
+    _GTEQ = 293,
+    _OROR = 294,
+    _ANDAND = 295,
+    _ADD = 296,
+    _MINUS = 297
   };
-  typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
@@ -107,7 +101,7 @@ union YYSTYPE
    int intval;
    char *svalue;
 
-#line 111 "parser.tab.h"
+#line 105 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -323,6 +323,10 @@ exp:
           _VAR _LSQUARE exp _RSQUARE
           |
           _NOT exp
+          {
+               std::cout<<"NOT"<<std::endl;
+               variable_stack->expression_operations(_not);
+          }
           |
           exp _AND exp
           {
@@ -351,7 +355,7 @@ exp:
           exp _MULTIPLE exp
           { 
                std::cout<<"MULTIPLE"<<std::endl;
-               variable_stack->expression_operations(multiple) 
+               variable_stack->expression_operations(multiple); 
           }
           |
           exp _DIVIDE exp
@@ -427,6 +431,10 @@ exp:
           }
           |
           _MINUS exp
+          {
+               std::cout<<"MINUS_NUMBER"<<std::endl;
+               variable_stack->expression_operations(minus_number);
+          }
           ;
 
 
@@ -462,6 +470,6 @@ int main(int argc, char* argv[]) {
 	}
 	//fclose(yyin);
 	/* Output the MIPS code */
-	//mips_code->output_mips();
+	variable_stack->generate();
 	//return 0;
 }
