@@ -36,6 +36,9 @@ class Variable_Stack{
         /*********************************************************
          *                 Write/Read Functions
          *********************************************************/
+        /*********************************************************
+         *                 While Functions
+         *********************************************************/
         void while_stmt(){
             generate_mips->while_stmt(while_count);
         }
@@ -47,6 +50,15 @@ class Variable_Stack{
         }
         void while_end(){
             generate_mips->while_end(while_count);
+        }
+        /*********************************************************
+         *                 Do_While Functions
+         *********************************************************/
+        void do_while_stmt(){
+            generate_mips->do_while_stmt(while_count++);
+        }
+        void do_while_rparen(){
+            generate_mips->do_while_rparen(while_count,index-1);
         }
         /*********************************************************
          *                 Expression Functions
@@ -151,6 +163,9 @@ class Variable_Stack{
                     break;
             }
         }
+        /************************************************************
+         *                 Var_Decla/Assignment Functions
+         ************************************************************/
         void variable_declaration_without_value(std::string variable_name){
             variable_map[variable_name] = storage_set(index++,INT32_MIN);
             variable_without_value.insert(variable_name);
@@ -162,13 +177,6 @@ class Variable_Stack{
         void array_declaration(std::string array_name,int length){
             array_map[array_name] = array_info(index,length);
             index += length;
-        }
-        int get_variable_value(std::string variable_name){
-            if (variable_map.find(variable_name)==variable_map.end()){
-                std::cout<<"[Error] Value "+variable_name+" not exists"<<std::endl;
-                abort();
-            }
-            return variable_map[variable_name].value;
         }
         bool variable_value_exists(std::string variable_name){
             if (variable_without_value.find(variable_name)!=variable_without_value.end()){
@@ -188,6 +196,9 @@ class Variable_Stack{
             int arr_idx = array_map[array_name].memory_index;
             generate_mips->array_valued(index-1,arr_len);
         }
+        /************************************************************
+         *                 Generate MIPS code
+         ************************************************************/
         void generate(){
             generate_mips->generate_mips_code();
         }

@@ -22,6 +22,15 @@ class Generate_Mips{
             "lui $t0,4097"};
         int gt_not_count=0,equal_count=0,lteq_count=0,gteq_count=0,s1_zero_count=0,s2_zero_count=0;
     public:
+        /*********************************************************
+         *                 Write/Read Functions
+         *********************************************************/
+        /*********************************************************
+         *                 If Functions
+         *********************************************************/
+        /*********************************************************
+         *                 While Functions
+         *********************************************************/
         void while_stmt(int while_count){
             text_segment.push_back("while_begin"+std::to_string(while_count)+":");
         }
@@ -37,6 +46,22 @@ class Generate_Mips{
             text_segment.push_back("j while_begin"+std::to_string(while_count));
             text_segment.push_back("while_break"+std::to_string(while_count)+":");
         }
+        /*********************************************************
+         *                 Do_While Functions
+         *********************************************************/
+        void do_while_stmt(int while_count){
+            text_segment.push_back("do_while_begin"+std::to_string(while_count)+":");
+            text_segment.push_back("codeblock_begin"+std::to_string(while_count)+":");
+        }
+        void do_while_rparen(int while_count,int exp_idx){
+            text_segment.push_back("lw $t1,"+std::to_string(exp_idx*4)+"($t0)");
+            text_segment.push_back("beq $t1,$zero,do_while_break"+std::to_string(while_count));
+            text_segment.push_back("j do_while_begin"+std::to_string(while_count));
+            text_segment.push_back("do_while_break"+std::to_string(while_count)+":");
+        }
+        /*********************************************************
+         *                 Expression Functions
+         *********************************************************/
         void expression_variable(int variable_idx,int cmulative_idx){
             text_segment.push_back("lw $t1,"+std::to_string(variable_idx*4)+"($t0)");
             text_segment.push_back("sw $t1,"+std::to_string(cmulative_idx*4)+"($t0)");
@@ -190,7 +215,9 @@ class Generate_Mips{
                     break;
             }
         }
-
+        /************************************************************
+         *                 Var_Decla/Assignment Functions
+         ************************************************************/
         void variable_valued(int var_idx,int cumlative_index){
             text_segment.push_back("lw $t1,"+std::to_string(cumlative_index*4)+"($t0)");
             text_segment.push_back("sw $t1,"+std::to_string(var_idx*4)+"($t0)");
@@ -207,6 +234,9 @@ class Generate_Mips{
             text_segment.push_back("li $t1,"+std::to_string(value));
             text_segment.push_back("sw $t1,"+std::to_string(index*4)+"($t0)");
         }
+        /************************************************************
+         *                 Generate MIPS code
+         ************************************************************/
         void generate_mips_code(){
             std::ofstream outfile("compile.asm");
             for (auto line:data_segment){

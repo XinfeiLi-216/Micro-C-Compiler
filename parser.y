@@ -291,8 +291,28 @@ while_statement:
      DO code_block WHILE LPAREN exp RPAREN 
 ********************************************/
 do_while_statement:
-          _DO code_block _WHILE _LPAREN exp _RPAREN
+          do code_block _WHILE _LPAREN exp do_while_rparen
+          {  }
           ;
+
+
+/*********************do********************
+     _DO
+********************************************/
+do:
+          _DO
+          { variable_stack->do_while_stmt(); }
+          ;
+
+
+/**************do_while_rparen**************
+     _RPAREN
+********************************************/
+do_while_rparen:
+          _RPAREN
+          { variable_stack->do_while_rparen(); }
+          ;
+
 
 /********************while******************
      _WHILE
