@@ -12,13 +12,13 @@
 
      #include "Generate_MIPS/Variable_Stack.hpp"
 
-	//Instance of Class that manages the variables/generate mips
+	//instance of Class that manages the variables/generate mips
 	Variable_Stack* variable_stack = new Variable_Stack();
 	
-	//Definition for error function
+	//definition for error function
 	void yyerror(std::string msg);
 
-	//Proof that flex/bison can be correctly linked
+	//prove that flex/bison can be correctly linked
 	extern "C" int yyparse();
 	extern "C" FILE *yyin;
 	extern "C" int yylex();
@@ -260,19 +260,43 @@ assign_statement:
 **************************************/
 if_statement:
           if_stmt
-          { std::cout<<"if_stmt"<<std::endl; }
+          { 
+               std::cout<<"if_stmt"<<std::endl;
+          }
           |
-          if_stmt _ELSE code_block
-          { std::cout<<"else_stmt"<<std::endl; }
+          if_stmt else code_block
+          { 
+               std::cout<<"else_stmt"<<std::endl; 
+               variable_stack->else_end();
+          }
           ;
+
+
+/******************else*****************
+     else
+****************************************/
+else:
+     _ELSE
+     { variable_stack->if_else(); }
+     ;    
 
 
 /****************if_stmt****************
      if LPAREN exp RPAREN code_block
 ****************************************/
 if_stmt:
-          _IF _LPAREN exp _RPAREN code_block
+          _IF _LPAREN exp if_rparen code_block
+          { variable_stack->if_end(); }
           ;
+
+
+/****************if_rparen**************
+     _RPAREN
+****************************************/
+if_rparen:
+     _RPAREN
+     { variable_stack->if_rparen(); }
+     ;    
 
 
 /*************while_statement*************

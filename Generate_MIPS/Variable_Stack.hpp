@@ -30,12 +30,30 @@ class Variable_Stack{
         std::unordered_map<int,storage_set> temp_var_map;
         std::unordered_set<std::string> variable_without_value;
         std::unordered_map<std::string,array_info> array_map; 
+        std::unordered_map<int,int> else_exp_idx;
         int index = 0, count = 0, while_count=0;
         Generate_Mips* generate_mips = new Generate_Mips();
     public:
         /*********************************************************
          *                 Write/Read Functions
          *********************************************************/
+        /*********************************************************
+         *                 If Functions
+         *********************************************************/
+        void if_rparen(){
+            generate_mips->if_rparen(while_count,index-1);
+            else_exp_idx[while_count++] = index-1;
+        }
+        void if_end(){
+            generate_mips->if_end(while_count);
+        }
+        void if_else(){
+            generate_mips->if_else(while_count,else_exp_idx[while_count]);
+            while_count += 1;
+        }
+        void else_end(){
+            generate_mips->else_end(while_count);
+        }
         /*********************************************************
          *                 While Functions
          *********************************************************/
@@ -45,11 +63,11 @@ class Variable_Stack{
         void while_rparen(){
             generate_mips->while_rparen(while_count++,index-1);
         }
-        void codeblock_end(){
-            generate_mips->codeblock_end(--while_count);
-        }
         void while_end(){
             generate_mips->while_end(while_count);
+        }
+        void codeblock_end(){
+            generate_mips->codeblock_end(--while_count);
         }
         /*********************************************************
          *                 Do_While Functions

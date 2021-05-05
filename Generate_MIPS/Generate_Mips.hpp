@@ -16,7 +16,7 @@ class Generate_Mips{
 		// std::vector<std::string> data_segment{".data",
 		// 	"_prompt: .asciiz \"Enter the value of variable \" ",
 		// 	"_enter: .asciiz \"  \\n\" "};
-        std::vector<std::string> data_segment{".data"};
+        std::vector<std::string> data_segment{".data","# no pre-defined data"};
 		/* This vector store the text segment of mips code */
 		std::vector<std::string> text_segment{".text",
             "lui $t0,4097"};
@@ -28,6 +28,22 @@ class Generate_Mips{
         /*********************************************************
          *                 If Functions
          *********************************************************/
+        void if_rparen(int while_count,int exp_idx){
+            text_segment.push_back("lw $t1,"+std::to_string(exp_idx*4)+"($t0)");
+            text_segment.push_back("beq $t1,$zero,if_break"+std::to_string(while_count));
+            text_segment.push_back("# codeblock_begin"+std::to_string(while_count)+":");
+        }
+        void if_end(int while_count){
+            text_segment.push_back("if_break"+std::to_string(while_count)+":");
+        }
+        void if_else(int while_count,int index){
+            text_segment.push_back("lw $t1,"+std::to_string(index*4)+"($t0)");
+            text_segment.push_back("beq $t1,$zero,else_ignore"+std::to_string(while_count));
+            text_segment.push_back("# codeblock_begin"+std::to_string(while_count)+":");
+        }
+        void else_end(int while_count){
+            text_segment.push_back("else_ignore"+std::to_string(while_count)+":");
+        }
         /*********************************************************
          *                 While Functions
          *********************************************************/
@@ -37,10 +53,10 @@ class Generate_Mips{
         void while_rparen(int while_count,int exp_idx){
             text_segment.push_back("lw $t1,"+std::to_string(exp_idx*4)+"($t0)");
             text_segment.push_back("beq $t1,$zero,while_break"+std::to_string(while_count));
-            text_segment.push_back("codeblock_begin"+std::to_string(while_count)+":");
+            text_segment.push_back("# codeblock_begin"+std::to_string(while_count)+":");
         }
         void codeblock_end(int while_count){
-            text_segment.push_back("codeblock_end"+std::to_string(while_count)+":");
+            text_segment.push_back("# codeblock_end"+std::to_string(while_count)+":");
         }
         void while_end(int while_count){
             text_segment.push_back("j while_begin"+std::to_string(while_count));
@@ -51,7 +67,7 @@ class Generate_Mips{
          *********************************************************/
         void do_while_stmt(int while_count){
             text_segment.push_back("do_while_begin"+std::to_string(while_count)+":");
-            text_segment.push_back("codeblock_begin"+std::to_string(while_count)+":");
+            text_segment.push_back("# codeblock_begin"+std::to_string(while_count)+":");
         }
         void do_while_rparen(int while_count,int exp_idx){
             text_segment.push_back("lw $t1,"+std::to_string(exp_idx*4)+"($t0)");
