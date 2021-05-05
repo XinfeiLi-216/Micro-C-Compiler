@@ -30,16 +30,24 @@ class Variable_Stack{
         std::unordered_map<int,storage_set> temp_var_map;
         std::unordered_set<std::string> variable_without_value;
         std::unordered_map<std::string,array_info> array_map; 
-        int index = 0, count = 0;
+        int index = 0, count = 0, while_count=0;
         Generate_Mips* generate_mips = new Generate_Mips();
     public:
         /*********************************************************
          *                 Write/Read Functions
          *********************************************************/
         void while_stmt(){
-            
+            generate_mips->while_stmt(while_count);
         }
-
+        void while_rparen(){
+            generate_mips->while_rparen(while_count++,index-1);
+        }
+        void codeblock_end(){
+            generate_mips->codeblock_end(--while_count);
+        }
+        void while_end(){
+            generate_mips->while_end(while_count);
+        }
         /*********************************************************
          *                 Expression Functions
          *********************************************************/

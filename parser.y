@@ -173,8 +173,10 @@ declaration:
 *******************************/
 code_block:
           statement
+          { variable_stack->codeblock_end(); }
           |
           _LBRACE statements _RBRACE
+          { variable_stack->codeblock_end(); }
           ;
 
 
@@ -277,8 +279,11 @@ if_stmt:
      while LPAREN exp RPAREN code_block
 ******************************************/
 while_statement:
-          _WHILE _LPAREN exp _RPAREN code_block
-          { std::cout<<"WHILE"<<std::endl; }
+          while _LPAREN exp while_rparen code_block
+          { 
+               std::cout<<"WHILE"<<std::endl;
+               variable_stack->while_end();
+          }
           ;
 
 
@@ -288,6 +293,23 @@ while_statement:
 do_while_statement:
           _DO code_block _WHILE _LPAREN exp _RPAREN
           ;
+
+/********************while******************
+     _WHILE
+********************************************/
+while:
+     _WHILE
+     { variable_stack->while_stmt(); }
+     ;
+
+
+/***************while_rparen****************
+     _RPAREN
+********************************************/
+while_rparen:
+     _RPAREN
+     { variable_stack->while_rparen(); }
+     ;
 
 
 /*************return_statement**************
@@ -451,13 +473,6 @@ exp:
                variable_stack->expression_operations(minus_number);
           }
           ;
-
-
-/**************exp_while*************
-     # TODO
-*************************************/
-exp_while:
-
 
 
 %%

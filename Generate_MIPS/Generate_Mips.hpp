@@ -22,6 +22,21 @@ class Generate_Mips{
             "lui $t0,4097"};
         int gt_not_count=0,equal_count=0,lteq_count=0,gteq_count=0,s1_zero_count=0,s2_zero_count=0;
     public:
+        void while_stmt(int while_count){
+            text_segment.push_back("while_begin"+std::to_string(while_count)+":");
+        }
+        void while_rparen(int while_count,int exp_idx){
+            text_segment.push_back("lw $t1,"+std::to_string(exp_idx*4)+"($t0)");
+            text_segment.push_back("beq $t1,$zero,while_break"+std::to_string(while_count));
+            text_segment.push_back("codeblock_begin"+std::to_string(while_count)+":");
+        }
+        void codeblock_end(int while_count){
+            text_segment.push_back("codeblock_end"+std::to_string(while_count)+":");
+        }
+        void while_end(int while_count){
+            text_segment.push_back("j while_begin"+std::to_string(while_count));
+            text_segment.push_back("while_break"+std::to_string(while_count)+":");
+        }
         void expression_variable(int variable_idx,int cmulative_idx){
             text_segment.push_back("lw $t1,"+std::to_string(variable_idx*4)+"($t0)");
             text_segment.push_back("sw $t1,"+std::to_string(cmulative_idx*4)+"($t0)");
