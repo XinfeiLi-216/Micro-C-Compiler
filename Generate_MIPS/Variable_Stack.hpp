@@ -41,6 +41,9 @@ class Variable_Stack{
          *                 If Functions
          *********************************************************/
         void if_rparen(){
+            if (while_count%10==0){
+                while_count += 10;
+            }
             generate_mips->if_rparen(while_count,index-1);
             else_exp_idx[while_count++] = index-1;
         }
@@ -48,6 +51,9 @@ class Variable_Stack{
             generate_mips->if_end(while_count);
         }
         void if_else(){
+            if (while_count%10==0){
+                while_count += 10;
+            }
             generate_mips->if_else(while_count,else_exp_idx[while_count]);
             while_count += 1;
         }
@@ -61,6 +67,9 @@ class Variable_Stack{
             generate_mips->while_stmt(while_count);
         }
         void while_rparen(){
+            if (while_count%10==0){
+                while_count += 10;
+            }
             generate_mips->while_rparen(while_count++,index-1);
         }
         void while_end(){
@@ -73,6 +82,9 @@ class Variable_Stack{
          *                 Do_While Functions
          *********************************************************/
         void do_while_stmt(){
+            if (while_count%10==0){
+                while_count += 10;
+            }
             generate_mips->do_while_stmt(while_count++);
         }
         void do_while_rparen(){

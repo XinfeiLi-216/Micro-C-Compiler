@@ -102,7 +102,7 @@
    var_declarations statements
  ******************************/
 program:    /* empty */        
-          var_declarations statements 
+          var_declarations statements
           ;
 
 
@@ -316,7 +316,6 @@ while_statement:
 ********************************************/
 do_while_statement:
           do code_block _WHILE _LPAREN exp do_while_rparen
-          {  }
           ;
 
 

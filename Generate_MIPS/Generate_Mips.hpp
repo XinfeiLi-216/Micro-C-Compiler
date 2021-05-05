@@ -38,7 +38,7 @@ class Generate_Mips{
         }
         void if_else(int while_count,int index){
             text_segment.push_back("lw $t1,"+std::to_string(index*4)+"($t0)");
-            text_segment.push_back("beq $t1,$zero,else_ignore"+std::to_string(while_count));
+            text_segment.push_back("bne $t1,$zero,else_ignore"+std::to_string(while_count));
             text_segment.push_back("# codeblock_begin"+std::to_string(while_count)+":");
         }
         void else_end(int while_count){
