@@ -31,12 +31,19 @@ class Variable_Stack{
         std::unordered_set<std::string> variable_without_value;
         std::unordered_map<std::string,array_info> array_map; 
         std::unordered_map<int,int> else_exp_idx;
-        int index = 0, count = 0, while_count=0;
+        int index = 12, count = 0, while_count=0;
         Generate_Mips* generate_mips = new Generate_Mips();
     public:
         /*********************************************************
          *                 Write/Read Functions
          *********************************************************/
+        void read_stmt(std::string variable_name){
+            int var_idx = variable_map[variable_name].memory_index;
+            generate_mips->read_stmt(var_idx);
+        }
+        void write_stmt(){
+            generate_mips->write_stmt(index-1);
+        }
         /*********************************************************
          *                 If Functions
          *********************************************************/
@@ -101,6 +108,15 @@ class Variable_Stack{
             temp_var_map[count++] = storage_set(index,value);
             generate_mips->expression_decla(index++,value);
             return count;
+        }
+        void expression_array(std::string array_name){
+            if (array_map.find(array_name)==array_map.end()){
+                std::cout<<"[Error] Trying to use variable"+array_name+" as a array"<<std::endl;
+                abort();
+            }
+            int arr_idx = array_map[array_name].memory_index;
+            int arr_len = array_map[array_name].length;
+            generate_mips->array_expression(arr_idx,index-1,arr_len);
         }
         void expression_operations(operations operation){
             switch (operation){
@@ -207,6 +223,7 @@ class Variable_Stack{
         void array_declaration(std::string array_name,int length){
             array_map[array_name] = array_info(index,length);
             index += length;
+            std::cout<<index<<std::endl;
         }
         bool variable_value_exists(std::string variable_name){
             if (variable_without_value.find(variable_name)!=variable_without_value.end()){
@@ -218,13 +235,25 @@ class Variable_Stack{
             if (!variable_value_exists(variable_name)){
                 variable_without_value.erase(variable_without_value.find(variable_name));
             }
+            if (variable_map.find(variable_name)==variable_map.end()){
+                std::cout<<"[Error] Use undeclared variable"<<std::endl;
+                abort();
+            }
             int var_idx = variable_map[variable_name].memory_index;
+            std::cout<<"?????"<<index<<std::endl;
             generate_mips->variable_valued(var_idx,index-1);
         }
         void array_be_valued(std::string array_name){
             int arr_len = array_map[array_name].length;
             int arr_idx = array_map[array_name].memory_index;
             generate_mips->array_valued(index-1,arr_len);
+            std::cout<<index-1<<std::endl;
+        }
+        /************************************************************
+         *                 Return Stmt
+         ************************************************************/
+        void return_stmt(){
+            generate_mips->return_stmt();
         }
         /************************************************************
          *                 Generate MIPS code

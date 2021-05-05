@@ -1,112 +1,154 @@
 .data
-# no pre-defined data
+_prompt: .asciiz "Enter the value of variable" 
+_enter: .asciiz " \n" 
+_outofrange: .asciiz " IndexOutOfRange" 
 .text
 lui $t0,4097
-li $t1,3
-sw $t1,12($t0)
-lw $t1,12($t0)
-sw $t1,0($t0)
-li $t1,3
-sw $t1,16($t0)
-lw $t1,16($t0)
-sw $t1,4($t0)
-li $t1,6
-sw $t1,20($t0)
-lw $t1,20($t0)
-sw $t1,8($t0)
-li $t1,1
-sw $t1,24($t0)
-lw $t1,24($t0)
-beq $t1,$zero,if_break10
-# codeblock_begin10:
-while_begin11:
-lw $t1,4($t0)
-sw $t1,28($t0)
 li $t1,0
-sw $t1,32($t0)
-lw $s1,28($t0)
-lw $s2,32($t0)
-slt $t3,$s1,$s2
-li $t4,1
-sw $zero,28($t0)
-beq $t3,$t4,gt_not_label0
-beq $s1,$s2,gt_not_label0
-sw $t4,28($t0)
-gt_not_label0:
-lw $t1,28($t0)
-beq $t1,$zero,while_break11
-# codeblock_begin11:
-do_while_begin12:
-# codeblock_begin12:
-lw $t1,0($t0)
-sw $t1,32($t0)
+sw $t1,72($t0)
 li $t1,1
-sw $t1,36($t0)
-lw $s1,32($t0)
-lw $s2,36($t0)
-add $s0,$s1,$s2
-sw $s0,32($t0)
-lw $t1,32($t0)
-sw $t1,0($t0)
-lw $t1,8($t0)
-sw $t1,36($t0)
+sw $t1,76($t0)
+lw $t1,72($t0)
+li $t2,5
+slt $t3,$t1,$t2
+bne $t3,$zero,arr_outofrange0
+la $a0,_outofrange
+li $v0,4
+syscall
+arr_outofrange0:
+lw $t2,76($t0)
+li $t3,4
+mul $t4,$t3,$t1
+li $t3,48
+add $t4,$t4,$t3
+add $t4,$t4,$t0
+sw $t2,0($t4)
 li $t1,1
-sw $t1,40($t0)
-lw $s1,36($t0)
-lw $s2,40($t0)
-add $s0,$s1,$s2
-sw $s0,36($t0)
-lw $t1,36($t0)
-sw $t1,8($t0)
-# codeblock_end12:
-lw $t1,8($t0)
-sw $t1,40($t0)
-li $t1,6
-sw $t1,44($t0)
-lw $s1,40($t0)
-lw $s2,44($t0)
-slt $s0,$s1,$s2
-sw $s0,40($t0)
-lw $t1,40($t0)
-beq $t1,$zero,do_while_break12
-j do_while_begin12
-do_while_break12:
+sw $t1,80($t0)
+li $t1,2
+sw $t1,84($t0)
+lw $t1,80($t0)
+li $t2,5
+slt $t3,$t1,$t2
+bne $t3,$zero,arr_outofrange1
+la $a0,_outofrange
+li $v0,4
+syscall
+arr_outofrange1:
+lw $t2,84($t0)
+li $t3,4
+mul $t4,$t3,$t1
+li $t3,48
+add $t4,$t4,$t3
+add $t4,$t4,$t0
+sw $t2,0($t4)
+li $t1,2
+sw $t1,88($t0)
 li $t1,3
-sw $t1,44($t0)
-lw $t1,44($t0)
-sw $t1,8($t0)
-lw $t1,4($t0)
-sw $t1,48($t0)
+sw $t1,92($t0)
+lw $t1,88($t0)
+li $t2,5
+slt $t3,$t1,$t2
+bne $t3,$zero,arr_outofrange2
+la $a0,_outofrange
+li $v0,4
+syscall
+arr_outofrange2:
+lw $t2,92($t0)
+li $t3,4
+mul $t4,$t3,$t1
+li $t3,48
+add $t4,$t4,$t3
+add $t4,$t4,$t0
+sw $t2,0($t4)
+li $t1,3
+sw $t1,96($t0)
+li $t1,4
+sw $t1,100($t0)
+lw $t1,96($t0)
+li $t2,5
+slt $t3,$t1,$t2
+bne $t3,$zero,arr_outofrange3
+la $a0,_outofrange
+li $v0,4
+syscall
+arr_outofrange3:
+lw $t2,100($t0)
+li $t3,4
+mul $t4,$t3,$t1
+li $t3,48
+add $t4,$t4,$t3
+add $t4,$t4,$t0
+sw $t2,0($t4)
+li $t1,4
+sw $t1,104($t0)
+li $t1,4
+sw $t1,108($t0)
+li $t1,3
+sw $t1,112($t0)
+lw $s1,108($t0)
+lw $s2,112($t0)
+mul $s0,$s1,$s2
+sw $s0,108($t0)
+lw $t1,104($t0)
+li $t2,5
+slt $t3,$t1,$t2
+bne $t3,$zero,arr_outofrange4
+la $a0,_outofrange
+li $v0,4
+syscall
+arr_outofrange4:
+lw $t2,108($t0)
+li $t3,4
+mul $t4,$t3,$t1
+li $t3,48
+add $t4,$t4,$t3
+add $t4,$t4,$t0
+sw $t2,0($t4)
+la $a0,_prompt
+li $v0,4
+syscall
+li $v0,5
+syscall
+sw $v0,68($t0)
+li $t1,0
+sw $t1,112($t0)
+lw $t1,112($t0)
+li $t2,5
+slt $t3,$t1,$t2
+bne $t3,$zero,arr_outofrange5
+la $a0,_outofrange
+li $v0,4
+syscall
+arr_outofrange5:
+li $t3,12
+add $t3,$t1,$t3
+li $t4,4
+mul $t4,$t3,$t4
+add $t4,$t4,$t0
+lw $t5,0($t4)
+sw $t5,112($t0)
 li $t1,1
-sw $t1,52($t0)
-lw $s1,48($t0)
-lw $s2,52($t0)
-sub $s0,$s1,$s2
-sw $s0,48($t0)
-lw $t1,48($t0)
-sw $t1,4($t0)
-# codeblock_end11:
-j while_begin11
-while_break11:
-# codeblock_end10:
-if_break10:
-lw $t1,0($t0)
-bne $t1,$zero,else_ignore20
-# codeblock_begin20:
-li $t1,6
-sw $t1,52($t0)
-lw $t1,52($t0)
-sw $t1,0($t0)
-# codeblock_end20:
-else_ignore20:
-li $t1,1
-sw $t1,56($t0)
-lw $t1,56($t0)
-beq $t1,$zero,if_break30
-# codeblock_begin30:
-li $t1,5
-sw $t1,60($t0)
-lw $t1,60($t0)
-sw $t1,4($t0)
-# codeblock_end30:
-if_break30:
+sw $t1,116($t0)
+lw $t1,116($t0)
+li $t2,5
+slt $t3,$t1,$t2
+bne $t3,$zero,arr_outofrange6
+la $a0,_outofrange
+li $v0,4
+syscall
+arr_outofrange6:
+li $t3,12
+add $t3,$t1,$t3
+li $t4,4
+mul $t4,$t3,$t4
+add $t4,$t4,$t0
+lw $t5,0($t4)
+sw $t5,116($t0)
+lw $s1,112($t0)
+lw $s2,116($t0)
+add $s0,$s1,$s2
+sw $s0,112($t0)
+lw $a0,112($t0)
+li $v0,1
+syscall

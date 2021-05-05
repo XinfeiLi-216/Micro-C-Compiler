@@ -360,6 +360,7 @@ while_rparen:
 ********************************************/
 return_statement:
           _RETURN
+          { variable_stack->return_stmt(); }
           ;
 
 
@@ -368,6 +369,9 @@ return_statement:
 ************************************/
 read_statement:
           _SCANF _LPAREN _VAR _RPAREN
+          {
+               variable_stack->read_stmt($3);
+          }
           ;
 
 
@@ -376,6 +380,7 @@ read_statement:
 *************************************/
 write_statement:
           _PRINTF _LPAREN exp _RPAREN
+          { variable_stack->write_stmt(); }
           ;
 
 
@@ -401,6 +406,9 @@ exp:
           }
           |
           _VAR _LSQUARE exp _RSQUARE
+          {
+               variable_stack->expression_array($1);
+          }
           |
           _NOT exp
           {

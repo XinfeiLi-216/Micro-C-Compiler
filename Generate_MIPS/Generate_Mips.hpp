@@ -13,18 +13,32 @@ enum operations{lsquare,_not,_and,_or,add,minus,multiple,divide,lt,gt,
 class Generate_Mips{
     private:
         /* This vector store the data segment of mips code */
-		// std::vector<std::string> data_segment{".data",
-		// 	"_prompt: .asciiz \"Enter the value of variable \" ",
-		// 	"_enter: .asciiz \"  \\n\" "};
-        std::vector<std::string> data_segment{".data","# no pre-defined data"};
+		std::vector<std::string> data_segment{".data",
+			"_prompt: .asciiz \"Enter the value of variable\" ",
+			"_enter: .asciiz \" \\n\" ",
+            "_outofrange: .asciiz \" IndexOutOfRange\" "};
+        //std::vector<std::string> data_segment{".data","# no pre-defined data"};
 		/* This vector store the text segment of mips code */
 		std::vector<std::string> text_segment{".text",
             "lui $t0,4097"};
-        int gt_not_count=0,equal_count=0,lteq_count=0,gteq_count=0,s1_zero_count=0,s2_zero_count=0;
+        int gt_not_count=0,equal_count=0,lteq_count=0,gteq_count=0,s1_zero_count=0,s2_zero_count=0,arr_count=0;
     public:
         /*********************************************************
          *                 Write/Read Functions
          *********************************************************/
+        void read_stmt(int var_idx){
+            text_segment.push_back("la $a0,_prompt");
+            text_segment.push_back("li $v0,4");
+            text_segment.push_back("syscall");
+            text_segment.push_back("li $v0,5");
+            text_segment.push_back("syscall");
+            text_segment.push_back("sw $v0,"+std::to_string(var_idx*4)+"($t0)");
+        }
+        void write_stmt(int exp_idx){
+            text_segment.push_back("lw $a0,"+std::to_string(exp_idx*4)+"($t0)");
+            text_segment.push_back("li $v0,1");
+            text_segment.push_back("syscall");
+        }
         /*********************************************************
          *                 If Functions
          *********************************************************/
@@ -86,12 +100,26 @@ class Generate_Mips{
             text_segment.push_back("li $t1,"+std::to_string(value));
             text_segment.push_back("sw $t1,"+std::to_string(index*4)+"($t0)");
         }
+        void array_expression(int idx1,int idx2,int length){
+            text_segment.push_back("lw $t1,"+std::to_string(idx2*4)+"($t0)");
+            text_segment.push_back("li $t2,"+std::to_string(length));
+            text_segment.push_back("slt $t3,$t1,$t2");
+            text_segment.push_back("bne $t3,$zero,arr_outofrange"+std::to_string(arr_count));
+            text_segment.push_back("la $a0,_outofrange");
+            text_segment.push_back("li $v0,4");
+            text_segment.push_back("syscall");
+            text_segment.push_back("arr_outofrange"+std::to_string(arr_count++)+":");
+            text_segment.push_back("li $t3,"+std::to_string(idx1));
+            text_segment.push_back("add $t3,$t1,$t3");
+            text_segment.push_back("li $t4,4");
+            text_segment.push_back("mul $t4,$t3,$t4");
+            text_segment.push_back("add $t4,$t4,$t0");
+            text_segment.push_back("lw $t5,0($t4)");
+            text_segment.push_back("sw $t5,"+std::to_string(idx2*4)+"($t0)");
+        }
         void operations_in_memory(int idx1,int idx2,operations operation){
             switch (operation){
-                case 0:
-                    // TODO
                 case 1:
-                    // TODO
                     text_segment.push_back("lw $s1,"+std::to_string(idx1*4)+"($t0)");
                     text_segment.push_back("li $s2,"+std::to_string(__INT32_MAX__));
                     text_segment.push_back("xor $s0,$s1,$s2");
@@ -240,15 +268,31 @@ class Generate_Mips{
         }
         void array_valued(int cumlative_index,int length){
             text_segment.push_back("lw $t1,"+std::to_string(cumlative_index*4-4)+"($t0)");
+            text_segment.push_back("li $t2,"+std::to_string(length));
+            text_segment.push_back("slt $t3,$t1,$t2");
+            text_segment.push_back("bne $t3,$zero,arr_outofrange"+std::to_string(arr_count));
+            text_segment.push_back("la $a0,_outofrange");
+            text_segment.push_back("li $v0,4");
+            text_segment.push_back("syscall");
+            text_segment.push_back("arr_outofrange"+std::to_string(arr_count++)+":");
             text_segment.push_back("lw $t2,"+std::to_string(cumlative_index*4)+"($t0)");
             text_segment.push_back("li $t3,4");
             text_segment.push_back("mul $t4,$t3,$t1");
+            text_segment.push_back("li $t3,48");
+            text_segment.push_back("add $t4,$t4,$t3");
             text_segment.push_back("add $t4,$t4,$t0");
-            text_segment.push_back("sw $t1,0($t4)");
+            text_segment.push_back("sw $t2,0($t4)");
         };
         void variable_decla(int index,int value){
             text_segment.push_back("li $t1,"+std::to_string(value));
             text_segment.push_back("sw $t1,"+std::to_string(index*4)+"($t0)");
+        }
+        /************************************************************
+         *                 Return Stmt
+         ************************************************************/
+        void return_stmt(){
+            text_segment.push_back("li $v0,10");
+            text_segment.push_back("syscall");
         }
         /************************************************************
          *                 Generate MIPS code

@@ -1,6 +1,5 @@
 file_for_g++ = lex.yy.c parser.tab.c
-mips_class = Generate_MIPS/generate_mips.cpp
-mips_header = Generate_MIPS/generate_mips.h
+mips_header = Generate_MIPS/Generate_Mips.hpp Generate_MIPS/Variable_Stack.hpp
 
 micro: scanner.l parser.y $(mips_class) $(mips_header)
 	bison -d parser.y

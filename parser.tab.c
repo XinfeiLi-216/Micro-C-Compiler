@@ -570,9 +570,9 @@ static const yytype_int16 yyrline[] =
      152,   156,   159,   162,   165,   175,   178,   188,   190,   201,
      204,   206,   208,   219,   221,   223,   225,   234,   236,   245,
      250,   262,   267,   279,   288,   297,   306,   318,   326,   335,
-     344,   353,   362,   370,   378,   387,   390,   393,   403,   405,
-     411,   417,   423,   429,   435,   441,   447,   453,   459,   465,
-     471,   477,   483,   489,   495,   501,   507,   513
+     344,   353,   362,   371,   382,   392,   395,   398,   408,   413,
+     419,   425,   431,   437,   443,   449,   455,   461,   467,   473,
+     479,   485,   491,   497,   503,   509,   515,   521
 };
 #endif
 
@@ -1650,20 +1650,40 @@ yyreduce:
 #line 1651 "parser.tab.c"
     break;
 
-  case 45:
-#line 388 "parser.y"
-          { variable_stack->expression_declaration((yyvsp[0].intval)); }
+  case 42:
+#line 363 "parser.y"
+          { variable_stack->return_stmt(); }
 #line 1657 "parser.tab.c"
     break;
 
-  case 46:
-#line 391 "parser.y"
+  case 43:
+#line 372 "parser.y"
+          {
+               variable_stack->read_stmt((yyvsp[-1].svalue));
+          }
+#line 1665 "parser.tab.c"
+    break;
+
+  case 44:
+#line 383 "parser.y"
+          { variable_stack->write_stmt(); }
+#line 1671 "parser.tab.c"
+    break;
+
+  case 45:
+#line 393 "parser.y"
           { variable_stack->expression_declaration((yyvsp[0].intval)); }
-#line 1663 "parser.tab.c"
+#line 1677 "parser.tab.c"
+    break;
+
+  case 46:
+#line 396 "parser.y"
+          { variable_stack->expression_declaration((yyvsp[0].intval)); }
+#line 1683 "parser.tab.c"
     break;
 
   case 47:
-#line 394 "parser.y"
+#line 399 "parser.y"
           {    
                if (variable_stack->variable_value_exists((yyvsp[0].svalue))) {
                     variable_stack->expression_variable((yyvsp[0].svalue));    
@@ -1672,182 +1692,190 @@ yyreduce:
                     abort();
                }
           }
-#line 1676 "parser.tab.c"
+#line 1696 "parser.tab.c"
+    break;
+
+  case 48:
+#line 409 "parser.y"
+          {
+               variable_stack->expression_array((yyvsp[-3].svalue));
+          }
+#line 1704 "parser.tab.c"
     break;
 
   case 49:
-#line 406 "parser.y"
+#line 414 "parser.y"
           {
                std::cout<<"NOT"<<std::endl;
                variable_stack->expression_operations(_not);
           }
-#line 1685 "parser.tab.c"
+#line 1713 "parser.tab.c"
     break;
 
   case 50:
-#line 412 "parser.y"
+#line 420 "parser.y"
           {
                std::cout<<"AND"<<std::endl;
                variable_stack->expression_operations(_and);
           }
-#line 1694 "parser.tab.c"
+#line 1722 "parser.tab.c"
     break;
 
   case 51:
-#line 418 "parser.y"
+#line 426 "parser.y"
           {
                std::cout<<"OR"<<std::endl;
                variable_stack->expression_operations(_or);
           }
-#line 1703 "parser.tab.c"
+#line 1731 "parser.tab.c"
     break;
 
   case 52:
-#line 424 "parser.y"
+#line 432 "parser.y"
           {
                std::cout<<"ADD"<<std::endl;
                variable_stack->expression_operations(add);
           }
-#line 1712 "parser.tab.c"
+#line 1740 "parser.tab.c"
     break;
 
   case 53:
-#line 430 "parser.y"
+#line 438 "parser.y"
           { 
                std::cout<<"MINUS"<<std::endl; 
                variable_stack->expression_operations(minus);
           }
-#line 1721 "parser.tab.c"
+#line 1749 "parser.tab.c"
     break;
 
   case 54:
-#line 436 "parser.y"
+#line 444 "parser.y"
           { 
                std::cout<<"MULTIPLE"<<std::endl;
                variable_stack->expression_operations(multiple); 
           }
-#line 1730 "parser.tab.c"
+#line 1758 "parser.tab.c"
     break;
 
   case 55:
-#line 442 "parser.y"
+#line 450 "parser.y"
           { 
                std::cout<<"DIVIDE"<<std::endl; 
                variable_stack->expression_operations(divide);
           }
-#line 1739 "parser.tab.c"
+#line 1767 "parser.tab.c"
     break;
 
   case 56:
-#line 448 "parser.y"
+#line 456 "parser.y"
           { 
                std::cout<<"LT"<<std::endl; 
                variable_stack->expression_operations(lt);
           }
-#line 1748 "parser.tab.c"
+#line 1776 "parser.tab.c"
     break;
 
   case 57:
-#line 454 "parser.y"
+#line 462 "parser.y"
           { 
                std::cout<<"GT"<<std::endl; 
                variable_stack->expression_operations(gt);
           }
-#line 1757 "parser.tab.c"
+#line 1785 "parser.tab.c"
     break;
 
   case 58:
-#line 460 "parser.y"
+#line 468 "parser.y"
           { 
                std::cout<<"EQUAL"<<std::endl; 
                variable_stack->expression_operations(equal);
           }
-#line 1766 "parser.tab.c"
+#line 1794 "parser.tab.c"
     break;
 
   case 59:
-#line 466 "parser.y"
+#line 474 "parser.y"
           { 
                std::cout<<"NOTEQ"<<std::endl; 
                variable_stack->expression_operations(noteq);
           }
-#line 1775 "parser.tab.c"
+#line 1803 "parser.tab.c"
     break;
 
   case 60:
-#line 472 "parser.y"
+#line 480 "parser.y"
           { 
                std::cout<<"LTEQ"<<std::endl; 
                variable_stack->expression_operations(lteq);
           }
-#line 1784 "parser.tab.c"
+#line 1812 "parser.tab.c"
     break;
 
   case 61:
-#line 478 "parser.y"
+#line 486 "parser.y"
           { 
                std::cout<<"GTEQ"<<std::endl; 
                variable_stack->expression_operations(gteq);
           }
-#line 1793 "parser.tab.c"
+#line 1821 "parser.tab.c"
     break;
 
   case 62:
-#line 484 "parser.y"
+#line 492 "parser.y"
           { 
                std::cout<<"SHLOP"<<std::endl; 
                variable_stack->expression_operations(shlop);
           }
-#line 1802 "parser.tab.c"
+#line 1830 "parser.tab.c"
     break;
 
   case 63:
-#line 490 "parser.y"
+#line 498 "parser.y"
           { 
                std::cout<<"SHROP"<<std::endl; 
                variable_stack->expression_operations(shrop);
           }
-#line 1811 "parser.tab.c"
+#line 1839 "parser.tab.c"
     break;
 
   case 64:
-#line 496 "parser.y"
+#line 504 "parser.y"
           { 
                std::cout<<"ANDAND"<<std::endl; 
                variable_stack->expression_operations(andand);
           }
-#line 1820 "parser.tab.c"
+#line 1848 "parser.tab.c"
     break;
 
   case 65:
-#line 502 "parser.y"
+#line 510 "parser.y"
           { 
                std::cout<<"OROR"<<std::endl; 
                variable_stack->expression_operations(oror);
           }
-#line 1829 "parser.tab.c"
+#line 1857 "parser.tab.c"
     break;
 
   case 66:
-#line 508 "parser.y"
+#line 516 "parser.y"
           { 
                std::cout<<"PAREN"<<std::endl; 
                variable_stack->expression_operations(paren);
           }
-#line 1838 "parser.tab.c"
+#line 1866 "parser.tab.c"
     break;
 
   case 67:
-#line 514 "parser.y"
+#line 522 "parser.y"
           {
                std::cout<<"MINUS_NUMBER"<<std::endl;
                variable_stack->expression_operations(minus_number);
           }
-#line 1847 "parser.tab.c"
+#line 1875 "parser.tab.c"
     break;
 
 
-#line 1851 "parser.tab.c"
+#line 1879 "parser.tab.c"
 
       default: break;
     }
@@ -2079,7 +2107,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 521 "parser.y"
+#line 529 "parser.y"
 
 
 

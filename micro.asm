@@ -1,19 +1,8 @@
-int a,b,c;
-a = 3;
-b = 3;
-c = 6;
-if (1){
-    while (b>0) {
-        do {
-            a = a+1;
-            c = c+1;
-        } while (c<6);
-        c = 3;
-        b = b-1;
-    }
-} else {
-    a = 6;
-}
-if (1){
-    b = 5;
-}
+int a[5],b;
+a[0] = 1;
+a[1] = 2;
+a[2] = 3;
+a[3] = 4;
+a[4] = 4*3;
+scanf(b);
+printf(a[0]+a[1]);
